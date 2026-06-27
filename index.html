@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aplicaciones Prácticas de la Semejanza</title>
+    <style>
+        :root {
+            --color-dark: #112A46;
+            --color-teal: #48B5B4;
+            --color-orange: #F39C12;
+            --color-bg: #F4F7F6;
+            --color-card: #FFFFFF;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--color-bg);
+            color: var(--color-dark);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h1 {
+            text-align: center;
+            color: var(--color-dark);
+            margin-bottom: 30px;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+            max-width: 1000px;
+            width: 100%;
+        }
+
+        .card {
+            background: var(--color-card);
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            border-top: 5px solid var(--color-teal);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .icon-circle {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            color: white;
+            font-weight: bold;
+            font-size: 20px;
+        }
+
+        .icon-teal { background-color: var(--color-dark); } /* Variador */
+        .icon-green { background-color: var(--color-teal); } /* Recorte */
+        .icon-orange { background-color: var(--color-orange); } /* Modelos */
+        .icon-blue { background-color: #2980B9; } /* Ahorro */
+
+        .card h2 {
+            font-size: 18px;
+            margin: 0;
+            color: var(--color-dark);
+        }
+
+        .description {
+            font-size: 14px;
+            color: #555;
+            margin-bottom: 20px;
+            min-height: 40px;
+        }
+
+        .interactive-area {
+            background: var(--color-bg);
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            margin: 15px 0;
+            accent-color: var(--color-teal);
+        }
+
+        .result-text {
+            font-size: 16px;
+            font-weight: bold;
+            color: var(--color-dark);
+            margin-top: 10px;
+        }
+
+        .highlight {
+            color: var(--color-orange);
+            font-size: 24px;
+        }
+
+        /* Contenedores SVG */
+        .svg-box {
+            height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 10px;
+        }
+
+        /* Animaciones específicas */
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+        @keyframes shake { 
+            0% { transform: translateX(0); }
+            25% { transform: translateX(-3px); }
+            50% { transform: translateX(3px); }
+            75% { transform: translateX(-3px); }
+            100% { transform: translateX(0); }
+        }
+
+        .rotating { animation: spin linear infinite; transform-origin: center; }
+        .shaking { animation: shake 0.3s linear infinite; }
+
+    </style>
+</head>
+<body>
+
+    <h1>Aplicaciones prácticas de la semejanza</h1>
+    
+    <div class="grid-container">
+
+        <div class="card">
+            <div class="card-header">
+                <div class="icon-circle icon-teal">≑</div>
+                <h2>Variadores de frecuencia</h2>
+            </div>
+            <div class="description">
+                La potencia consumida varía con el cubo de la velocidad. Bajar la velocidad un poco ahorra mucha energía.
+            </div>
+            <div class="interactive-area">
+                <div class="svg-box">
+                    <svg width="80" height="80" viewBox="0 0 100 100">
+                        <g id="fan-blade" class="rotating" style="animation-duration: 2s;">
+                            <circle cx="50" cy="50" r="10" fill="#112A46"/>
+                            <path d="M50,40 C60,20 80,10 90,30 C70,40 60,45 50,50 Z" fill="#48B5B4"/>
+                            <path d="M60,50 C80,60 90,80 70,90 C60,70 55,60 50,50 Z" fill="#48B5B4"/>
+                            <path d="M50,60 C40,80 20,90 10,70 C30,60 40,55 50,50 Z" fill="#48B5B4"/>
+                            <path d="M40,50 C20,40 10,20 30,10 C40,30 45,40 50,50 Z" fill="#48B5B4"/>
+                        </g>
+                    </svg>
+                </div>
+                <label>Velocidad del Motor: <span id="speed-val">100</span>%</label>
+                <input type="range" id="speed-slider" min="50" max="100" value="100" oninput="updateFreq()">
+                <div class="result-text">Consumo de Energía: <br><span class="highlight" id="power-val">100</span>%</div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <div class="icon-circle icon-green">✂</div>
+                <h2>Recorte del rodete</h2>
+            </div>
+            <div class="description">
+                Se tornea el diámetro para ajustar la bomba al punto justo. El caudal baja linealmente, la altura al cuadrado.
+            </div>
+            <div class="interactive-area">
+                <div class="svg-box">
+                    <svg width="100" height="100" viewBox="0 0 100 100">
+                        <circle cx="50" cy="50" r="45" fill="none" stroke="#ddd" stroke-width="2" stroke-dasharray="5,5"/>
+                        <circle id="impeller-trim" cx="50" cy="50" r="45" fill="#48B5B4" opacity="0.8"/>
+                        <circle cx="50" cy="50" r="8" fill="#112A46"/>
+                    </svg>
+                </div>
+                <label>Diámetro del rodete: <span id="diam-val">100</span>%</label>
+                <input type="range" id="diam-slider" min="70" max="100" value="100" oninput="updateTrim()">
+                <div class="result-text">Caudal resultante: <span style="color:var(--color-teal)" id="trim-q">100</span>%<br>
+                Altura resultante: <span style="color:var(--color-orange)" id="trim-h">100</span>%</div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <div class="icon-circle icon-orange">📏</div>
+                <h2>Ensayo con modelos</h2>
+            </div>
+            <div class="description">
+                Prueba de una bomba a escala para predecir el comportamiento del prototipo real usando las leyes de semejanza.
+            </div>
+            <div class="interactive-area">
+                <div class="svg-box" style="align-items: flex-end; justify-content: space-around; width: 100%;">
+                    <div style="text-align:center;">
+                        <svg width="40" height="40" viewBox="0 0 50 50">
+                            <rect x="15" y="20" width="20" height="30" fill="#112A46"/>
+                            <circle cx="25" cy="20" r="15" fill="#F39C12"/>
+                        </svg><br>
+                        <small>Modelo</small>
+                    </div>
+                    <div style="text-align:center;">
+                        <svg id="prototype-svg" width="40" height="40" viewBox="0 0 50 50" style="transform-origin: bottom center; transition: all 0.2s;">
+                            <rect x="15" y="20" width="20" height="30" fill="#112A46"/>
+                            <circle cx="25" cy="20" r="15" fill="#48B5B4"/>
+                        </svg><br>
+                        <small>Prototipo</small>
+                    </div>
+                </div>
+                <label>Factor de Escala (λ): <span id="scale-val">1</span>x</label>
+                <input type="range" id="scale-slider" min="1" max="5" step="0.5" value="1" oninput="updateModel()">
+                <div class="result-text">El Caudal (Q) crece en factor de: <span class="highlight" id="scale-q">1</span></div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <div class="icon-circle icon-blue">🌱</div>
+                <h2>Elegir bien y ahorrar</h2>
+            </div>
+            <div class="description">
+                Trabajar cerca del mejor punto de rendimiento (BEP) reduce drásticamente el consumo y el desgaste mecánico.
+            </div>
+            <div class="interactive-area">
+                <div class="svg-box" style="position: relative; border-bottom: 2px solid #ccc; border-left: 2px solid #ccc; width: 80%; height: 80px; margin: 0 auto 15px auto;">
+                    <svg width="100%" height="100%" viewBox="0 0 100 100" preserveAspectRatio="none" style="position:absolute; bottom:0; left:0;">
+                        <path d="M 0 100 Q 50 -20 100 100" fill="none" stroke="#48B5B4" stroke-width="4"/>
+                    </svg>
+                    <div id="op-point" style="width: 14px; height: 14px; background: #F39C12; border-radius: 50%; position: absolute; bottom: 0; left: 50%; transform: translate(-50%, 50%); transition: left 0.1s;"></div>
+                </div>
+                <label>Punto de Operación del Caudal</label>
+                <input type="range" id="eff-slider" min="0" max="100" value="50" oninput="updateEff()">
+                <div id="eff-status" class="result-text" style="color: #27AE60;">Estado: Óptimo (BEP)<br><small>Bajo desgaste, máxima eficiencia</small></div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // 1. Variador de Frecuencia
+        function updateFreq() {
+            const speed = document.getElementById('speed-slider').value;
+            document.getElementById('speed-val').innerText = speed;
+            
+            // Ley de semejanza: Potencia varía con el cubo de la velocidad (N^3)
+            const speedRatio = speed / 100;
+            const powerRatio = Math.pow(speedRatio, 3);
+            const powerPercent = (powerRatio * 100).toFixed(1);
+            
+            document.getElementById('power-val').innerText = powerPercent;
+            
+            // Cambiar velocidad de animación
+            const animDuration = (100 / speed) * 1.5; // inversamente proporcional
+            document.getElementById('fan-blade').style.animationDuration = animDuration + 's';
+        }
+
+        // 2. Recorte del rodete
+        function updateTrim() {
+            const diam = document.getElementById('diam-slider').value;
+            document.getElementById('diam-val').innerText = diam;
+            
+            // Ajuste visual
+            const radius = (45 * diam) / 100;
+            document.getElementById('impeller-trim').setAttribute('r', radius);
+            
+            // Cálculos teóricos aproximados: Q varía directo con D, H varía con D^2
+            const ratio = diam / 100;
+            document.getElementById('trim-q').innerText = (ratio * 100).toFixed(1);
+            document.getElementById('trim-h').innerText = (Math.pow(ratio, 2) * 100).toFixed(1);
+        }
+
+        // 3. Ensayo con modelos
+        function updateModel() {
+            const scale = document.getElementById('scale-slider').value;
+            document.getElementById('scale-val').innerText = scale;
+            
+            // Escala visual del SVG (máximo aprox doble de tamaño visual para no romper el layout)
+            const visualScale = 1 + (scale - 1) * 0.25; 
+            document.getElementById('prototype-svg').style.transform = `scale(${visualScale})`;
+            
+            // Ley de semejanza geométrica para caudales: Q varía con D^3 (asumiendo misma velocidad)
+            const qFactor = Math.pow(scale, 3);
+            document.getElementById('scale-q').innerText = qFactor.toFixed(1) + 'x';
+        }
+
+        // 4. Elegir bien y ahorrar
+        function updateEff() {
+            const val = document.getElementById('eff-slider').value;
+            const point = document.getElementById('op-point');
+            const status = document.getElementById('eff-status');
+            
+            point.style.left = val + '%';
+            
+            // Calcular altura en la parábola para posicionar el punto visualmente
+            // Ecuación de parábola invertida: y = a(x-h)^2 + k. Vértice en (50, 100)
+            const x = val;
+            const y = -0.04 * Math.pow(x - 50, 2) + 100; // Porcentaje de altura
+            point.style.bottom = y + '%';
+
+            // Evaluar distancia del BEP (50%)
+            const dist = Math.abs(val - 50);
+            
+            if (dist <= 15) {
+                status.innerHTML = 'Estado: Óptimo (BEP)<br><small>Bajo desgaste, máxima eficiencia</small>';
+                status.style.color = '#27AE60'; // Verde
+                point.className = ''; // Quitar vibración
+                point.style.background = '#27AE60';
+            } else if (dist <= 35) {
+                status.innerHTML = 'Estado: Aceptable<br><small>Menor eficiencia, desgaste moderado</small>';
+                status.style.color = '#F39C12'; // Naranja
+                point.className = '';
+                point.style.background = '#F39C12';
+            } else {
+                status.innerHTML = 'Estado: Peligro<br><small>Cavitación/Vibración, alto consumo</small>';
+                status.style.color = '#E74C3C'; // Rojo
+                point.className = 'shaking'; // Añadir vibración
+                point.style.background = '#E74C3C';
+            }
+        }
+    </script>
+</body>
+</html>
